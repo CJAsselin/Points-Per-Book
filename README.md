@@ -1,1 +1,1 @@
-# Points-Per-Book
+This program asks the user to input the number of books that were purchased in order to figure out how many points would be received. If there is no point amount associated with the number the user inputs, it will result in an error code of "Invalid Input".
