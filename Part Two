@@ -1,0 +1,78 @@
+from tkinter import *
+from PIL import Image, ImageTk
+import pandas as pd
+import os
+
+def load_data():
+    # Define your base directory
+    base_dir = r"Library/CloudStorage/OneDrive-CCSU/ClassApp/Midterm"
+
+    # Join the folder and file names properly
+    csv_path = os.path.join(base_dir, "midterm_exam.csv")
+    img1_path = os.path.join(base_dir, "logo1.png")
+    img2_path = os.path.join(base_dir, "logo2.png")
+
+    # Load the CSV
+    df = pd.read_csv(csv_path)
+    print("CSV loaded successfully!")
+
+    # Load images
+    logo1 = Image.open(img1_path)
+    logo2 = Image.open(img2_path)
+
+    # Show images (optional)
+    logo1.show()
+    logo2.show()
+
+    return df, logo1, logo2
+
+
+#window setup
+root = Tk()
+root.title("CCSU Mobile App")
+root.geometry("550x500")
+root.resizable(0, 0)
+root.configure(bg="lightblue")
+
+
+#load and display logo
+img = Image.open("logo1.png")
+img = img.resize((100, 100))
+logo = ImageTk.PhotoImage(img)
+logo_label = Label(root, image=logo, bg="lightblue")
+logo_label.place(x=10, y=10)
+
+
+#load data
+data = pd.read_csv("midterm_exam.csv")
+
+# Label for displaying results
+lb = Label(root, justify="left", bg="lightblue", anchor="w", font=("Arial", 10))
+lb.place(x=130, y=150)
+
+
+#button functions
+def calendar():
+    df = data[["CalendarDate"]].dropna()
+    lb.config(text=df.to_string(index=False))
+
+def buildings():
+    df = data[["Buildings"]].dropna()
+    lb.config(text=df.to_string(index=False))
+
+def faculty():
+    df = data[["FacultyName"]].dropna()
+    lb.config(text=df.to_string(index=False))
+
+
+#creating buttons
+btn1 = Button(root, text="Calendar", command=calendar, bg="lightgreen")
+btn1.place(x=100, y=110)
+
+btn2 = Button(root, text="Buildings", command=buildings, bg="lightgreen")
+btn2.place(x=220, y=110)
+
+btn3 = Button(root, text="Faculty", command=faculty, bg="lightgreen")
+btn3.place(x=340, y=110)
+
+root.mainloop()
