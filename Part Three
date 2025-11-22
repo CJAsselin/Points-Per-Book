@@ -1,0 +1,91 @@
+#project two, part two
+from tkinter import *
+from PIL import Image, ImageTk
+import pandas as pd
+import os
+
+def load_data():
+    # Define your base directory
+    base_dir = r"Library/CloudStorage/OneDrive-CCSU/ClassApp/Midterm"
+
+    # Join the folder and file names properly
+    csv_path = os.path.join(base_dir, "midterm_exam.csv")
+    img1_path = os.path.join(base_dir, "logo1.png")
+    img2_path = os.path.join(base_dir, "logo2.png")
+
+    # Load the CSV
+    df = pd.read_csv(csv_path)
+    print("CSV loaded successfully!")
+
+    # Load images
+    logo1 = Image.open(img1_path)
+    logo2 = Image.open(img2_path)
+
+    # Show images (optional)
+    logo1.show()
+    logo2.show()
+
+    return df, logo1, logo2
+
+#setting up windows
+
+root = Tk()
+root.title("CCSU Mobile App")
+root.geometry("600x520")
+root.resizable(0, 0)
+root.configure(bg="#ADD8E6")  # light blue
+
+#loading logo
+
+img = Image.open("logo1.png")
+img = img.resize((100, 100))
+logo = ImageTk.PhotoImage(img)
+logo_label = Label(root, image=logo, bg="#ADD8E6")
+logo_label.place(x=10, y=10)
+
+#loading data
+data = pd.read_csv("midterm_exam.csv")
+
+# Label for displaying results
+lb = Label(root, justify="left", bg="#ADD8E6", anchor="w", font=("Arial", 10))
+lb.place(x=130, y=160)
+
+#creating functions for buttons
+
+def calendar():
+    df = data[["CalendarDate"]].dropna()
+    lb.config(text=df.to_string(index=False))
+
+def buildings():
+    df = data[["Buildings"]].dropna()
+    lb.config(text=df.to_string(index=False))
+
+def faculty():
+    df = data[["FacultyName"]].dropna()
+    lb.config(text=df.to_string(index=False))
+
+def school_of_business():
+    programs = [
+        "Accounting", "Finance", "Management & Organization",
+        "Marketing", "Management Information Systems (MIS)",
+        "Business Analytics"
+    ]
+    lb.config(text="School of Business Programs:\n" + "\n".join(programs))
+
+def mis_department():
+    courses = [
+        "Intro to MIS", "Databases Management", "Systems Analysis & Design",
+        "Business Analytics / Data Visualization",
+        "Network and Information Security", "Project Management"
+    ]
+    lb.config(text="MIS Department Courses:\n" + "\n".join(courses))
+
+#creating buttons
+button_y = 120
+Button(root, text="Calendar", command=calendar, bg="lightgreen").place(x=80, y=button_y)
+Button(root, text="Buildings", command=buildings, bg="lightgreen").place(x=180, y=button_y)
+Button(root, text="Faculty", command=faculty, bg="lightgreen").place(x=280, y=button_y)
+Button(root, text="School of Business", command=school_of_business, bg="lightgreen").place(x=380, y=button_y)
+Button(root, text="MIS Department", command=mis_department, bg="lightgreen").place(x=520, y=button_y)
+
+root.mainloop()
